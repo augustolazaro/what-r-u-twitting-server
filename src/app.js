@@ -1,18 +1,15 @@
+require('dotenv').config()
+
 const Koa = require('koa')
 const Router = require('koa-router')
 const cors = require('@koa/cors')
-const fetch = require('node-fetch');
+const fetch = require('node-fetch')
 
 const app = new Koa()
 const router = new Router()
 
-const token = {
-  "token_type": "bearer",
-  "access_token": "AAAAAAAAAAAAAAAAAAAAAIu79AAAAAAAO7JaVKQmZdRXeG%2BWaqLwmrMbRr4%3DMPoL9ERgHRkOSjsZzT4VHCyZIJnE176qr1fANKSJMyRMLxo5yj",
-}
-
 const authRequest = async () => {
-  const credentials = `AexrALfqykM5y1WnKD2eMHcNc:3SgzUurKaGhd1gC6JlA8LJLQ3bOslExIYRk51WdxfaNXHNdwBN`
+  const credentials = `${process.env.API_KEY}:${process.env.API_SECRET_KEY}`
   const credentialsBase64Encoded = new Buffer(credentials).toString('base64');
 
   const uri = 'https://api.twitter.com/oauth2/token'
@@ -27,7 +24,7 @@ const authRequest = async () => {
   }
 
   const response = await fetch(uri, options)
-  
+
   return response.json()
 }
 
@@ -36,7 +33,7 @@ const getUserTimelineRequest = async () => {
   const options = {
     method: 'GET',
     headers: {
-      'Authorization': `Bearer ${token.access_token}`,
+      'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`,
     },
     json: true,
   }
